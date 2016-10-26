@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Like</string>
+
+    <string name="load_error">网络不见了~</string>
+    <string name="daily_top_tag">今日热闻</string>
+    <string name="headline">大公司头条</string>
+    <string name="load_more">加载更多...</string>
+</resources>
