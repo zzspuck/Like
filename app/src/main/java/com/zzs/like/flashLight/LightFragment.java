@@ -1,9 +1,8 @@
 package com.zzs.like.flashLight;
 
-import android.media.Image;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -27,12 +26,20 @@ public class LightFragment extends MVPBaseFragment<ILightContract.ILightFgView, 
     private ImageView mImage;
     // fab
     private FloatingActionButton mFloatBtn;
+    // 标题栏
+    private Toolbar mToorBar;
 
     @Override
     protected void initView(View rootView) {
         super.initView(rootView);
         mImage = (ImageView) rootView.findViewById(R.id.fl_img);
         mFloatBtn = (FloatingActionButton) rootView.findViewById(R.id.fl_fab_switch);
+        mToorBar = (Toolbar) rootView.findViewById(R.id.fl_toolbar);
+
+        mToorBar.setNavigationIcon(R.mipmap.ic_favorite_white_24dp);
+
+        mToorBar.setTitle(R.string.flash_light);
+        mToorBar.setTitleTextColor(getResources().getColor(android.R.color.white));
 
         setFabClick();
     }

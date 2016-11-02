@@ -10,12 +10,12 @@
     <!-- 开启闪光灯权限 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <!-- 网络请求权限-->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 网络请求权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -30,9 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".curiosityDaily.dailyFeed.DailyFeedActivity"/>
-        <activity android:name=".curiosityDaily.gankweb.GankWebActivity"/>
+        <activity android:name=".curiosityDaily.dailyFeed.DailyFeedActivity" />
+        <activity android:name=".curiosityDaily.gankweb.GankWebActivity" />
+        <activity android:name=".music.MusicActivity"></activity>
     </application>
 
 </manifest>

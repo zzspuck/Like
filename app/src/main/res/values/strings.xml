@@ -5,4 +5,10 @@
     <string name="daily_top_tag">今日热闻</string>
     <string name="headline">大公司头条</string>
     <string name="load_more">加载更多...</string>
+    <string name="flash_light">手电</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="string_online_music">在线音乐</string>
+    <string name="string_my_music">我的音乐</string>
 </resources>

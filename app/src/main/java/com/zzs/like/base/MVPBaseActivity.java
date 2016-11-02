@@ -9,10 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.Window;
 
-import com.zzs.like.MainActivity;
 import com.zzs.like.R;
+import com.zzs.like.util.ChangeStatusBarUtil;
+import com.zzs.like.util.StatusBarCompat;
 
 import butterknife.ButterKnife;
 
@@ -23,11 +23,15 @@ import butterknife.ButterKnife;
  * @date 2016..9.18
  */
 public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivity {
-
+    // presenter
     protected T mPresenter;
+    // appBar
     protected AppBarLayout mAppBar;
+    // toolbar
     protected Toolbar mToolbar;
+    // 刷新控件
     private SwipeRefreshLayout mRefreshLayout;
+    // 是否需要刷新
     private boolean mIsRequestDataRefresh = false;
 
     @Override
@@ -38,7 +42,6 @@ public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends App
             mPresenter = createPresenter();
             mPresenter.attachView((V) this);
         }
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         //布局
         setContentView(provideContentViewId());
         ButterKnife.bind(this);
@@ -61,6 +64,9 @@ public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends App
         if (isSetRefresh()) {
             setupSwipeRefresh();
         }
+
+        // 改变状态栏的颜色
+        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
     }
 
     private void setupSwipeRefresh() {
@@ -149,6 +155,7 @@ public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends App
 
     //用于引入布局文件
     abstract protected int provideContentViewId();
+
     // 引入下拉加载控件id
     abstract protected int provideSwipeRefershViewId();
 

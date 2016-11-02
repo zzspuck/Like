@@ -11,6 +11,8 @@ import com.zzs.like.base.BasePresenter;
 import com.zzs.like.base.MVPBaseActivity;
 import com.zzs.like.curiosityDaily.dailyFg.DailyFragment;
 import com.zzs.like.flashLight.LightFragment;
+import com.zzs.like.music.MusicEntranceFragment;
+import com.zzs.like.util.ChangeStatusBarUtil;
 
 public class MainActivity extends MVPBaseActivity implements BottomNavigationBar.OnTabSelectedListener {
     // 底部导航
@@ -23,8 +25,6 @@ public class MainActivity extends MVPBaseActivity implements BottomNavigationBar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        initView();
         // 初始化控件
         initBottomNavigation();
         // 设置点击监听
@@ -34,14 +34,6 @@ public class MainActivity extends MVPBaseActivity implements BottomNavigationBar
                 .beginTransaction()
                 .replace(R.id.container, new LightFragment())
                 .commitAllowingStateLoss();
-    }
-
-    /**
-     * 初始化控件
-     */
-    private void initView() {
-        CollapsingToolbarLayout collapsToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsToolbar.setTitle(getString(R.string.app_name));
     }
 
     @Override
@@ -106,7 +98,7 @@ public class MainActivity extends MVPBaseActivity implements BottomNavigationBar
                 fragment = new DailyFragment();
                 break;
             case 2:
-                fragment = new LightFragment();
+                fragment = MusicEntranceFragment.newInstance();
                 break;
             case 3:
                 fragment = new LightFragment();
