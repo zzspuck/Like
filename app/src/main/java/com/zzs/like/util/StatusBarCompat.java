@@ -41,6 +41,9 @@ public class StatusBarCompat {
                     getStatusBarHeight(activity));
             statusBarView.setBackgroundColor(color);
             contentView.addView(statusBarView, lp);
+            // 设置Activity layout的fitsSystemWindows
+            View contentChild = contentView.getChildAt(0);
+            contentChild.setFitsSystemWindows(true);
         }
 
     }

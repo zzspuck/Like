@@ -9,21 +9,32 @@
     android:fitsSystemWindows="true"
     app:popupTheme="@style/Theme.AppCompat.Light">
 
-    <Button
-        android:id="@+id/ft_btn_one"
+    <RadioGroup
+        android:id="@+id/rg_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/string_my_music"
-        android:background="@drawable/selector_btn_music_fg"
-        android:textSize="20sp" />
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/ft_btn_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/string_online_music"
-        android:background="@drawable/selector_btn_music_fg"
-        android:textSize="20sp" />
+        <RadioButton
+            android:id="@+id/rb_local_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_btn_music_fg"
+            android:textColor="@drawable/selector_text_color"
+            android:textSize="16dp"
+            android:button="@null"
+            android:checked="true"
+            android:text="@string/string_my_music"/>
+
+        <RadioButton
+            android:id="@+id/rb_online_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_btn_music_fg"
+            android:textColor="@drawable/selector_text_color"
+            android:textSize="16dp"
+            android:button="@null"
+            android:text="@string/string_online_music"/>
+    </RadioGroup>
 </android.support.v7.widget.Toolbar>

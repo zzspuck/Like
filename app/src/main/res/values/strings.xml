@@ -11,4 +11,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="string_online_music">在线音乐</string>
     <string name="string_my_music">我的音乐</string>
+    <string name="unknown">未知</string>
 </resources>
