@@ -4,20 +4,18 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.zzs.like.base.MVPBaseActivity;
 import com.zzs.like.constants.AppPreferences;
 import com.zzs.like.data.music.MusicInfoBean;
 import com.zzs.like.receiver.PhoneComingReceiver;
+import com.zzs.like.util.MusicPlayer;
 import com.zzs.like.util.MusicScanUntils;
 import com.zzs.like.util.SysLog;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +25,12 @@ import java.util.List;
  * @author zzs
  * @date 2016.11.04
  */
-public class MusicPlayService extends Service implements
-        MediaPlayer.OnPreparedListener
-        , MediaPlayer.OnCompletionListener
-        , MediaPlayer.OnBufferingUpdateListener
-        , AudioManager.OnAudioFocusChangeListener {
+public class MusicPlayService extends Service implements MusicPlayer.PlayListener{
 
     // TAG
     private static final String TAG = MusicPlayService.class.getSimpleName();
-    // 播放器
-    private static MediaPlayer mediaPlayer = new MediaPlayer();
     // 音乐信息列表
-    private static List<MusicInfoBean> mMusicList = new ArrayList<MusicInfoBean>();
+    private static List<MusicInfoBean> mMusicList = new ArrayList<>();
     // activity容器
     private static final List<MVPBaseActivity> mActivityStack = new ArrayList<>();
     //private String path = "http://ws.stream.qqmusic.qq.com/104779440.m4a?fromtag=46";
@@ -47,8 +39,8 @@ public class MusicPlayService extends Service implements
     private static int mPlayingMusicPosition;
     // 监听耳机插拔广播
     private PhoneComingReceiver mNoisyReceiver = new PhoneComingReceiver();
-    // 音频管理器
-    private AudioManager mAudioManager;
+    // 音乐播放器
+    private MusicPlayer mMusicPlayer;
 
     @Nullable
     @Override
@@ -60,35 +52,12 @@ public class MusicPlayService extends Service implements
     public void onCreate() {
         super.onCreate();
         SysLog.i(TAG, "Service onCreate");
-        if (mediaPlayer.isPlaying()) {
-            stopPlayer();
-        }
-        mediaPlayer.setOnCompletionListener(this);
         updateMusicList();
-        mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        mMusicPlayer = MusicPlayer.getInstance(this);
+        mMusicPlayer.setAudioFousListener();
+        mMusicPlayer.addPlayListener(this);
         IntentFilter mNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(mNoisyReceiver, mNoisyFilter);
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        mediaPlayer.start();
-        SysLog.i(TAG, "mediaPlayer onPrepared");
-    }
-
-    @Override
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
-    }
-
-    /**
-     * 一首歌曲播放完毕了，该播放下一首
-     *
-     * @param mediaPlayer
-     */
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        next();
     }
 
     @Override
@@ -100,16 +69,16 @@ public class MusicPlayService extends Service implements
         SysLog.i(TAG, "service onStartCommand");
         switch (intent.getAction()) {
             case AppPreferences.ACTION_MEDIA_PLAY_PAUSE:
-                playPause();
+                mMusicPlayer.processTogglePlaybackRequest();
                 break;
             case AppPreferences.ACTION_MEDIA_NEXT:
-                next();
+                playNext();
                 break;
             case AppPreferences.ACTION_MEDIA_PREVIOUS:
                 preMusic();
                 break;
             case AppPreferences.ACTION_MEDIA_PAUSE:
-                pause();
+                mMusicPlayer.processPauseRequest();
                 break;
         }
         return super.onStartCommand(intent, flags, startId);
@@ -145,193 +114,113 @@ public class MusicPlayService extends Service implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
+        if (mMusicPlayer != null) {
+            mMusicPlayer.onDestroy();
         }
         unregisterReceiver(mNoisyReceiver);
     }
 
-    /**
-     * 监听音频焦点
-     *
-     * @param focusChange
-     */
     @Override
-    public void onAudioFocusChange(int focusChange) {
-        Log.i("iii", "onAudioFocusChange");
-        switch (focusChange) {
-            case AudioManager.AUDIOFOCUS_LOSS:
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    pause();
-                }
-                break;
-        }
+    public void onPlayed(Object playId, String uri) {
     }
 
+    @Override
+    public void onPaused(Object playId, String uri) {
+    }
+
+    @Override
+    public void onStopped(Object playId, String uri) {
+
+    }
+
+    @Override
+    public void onError(Object playId, String error) {
+
+    }
+
+    @Override
+    public void onCompletion(Object playId, String uri) {
+        // 播放完成则，播放下一首音乐
+        playNext();
+    }
+
+    @Override
+    public void onPrepared(Object playId, String uri) {
+    }
+
+
+    /**
+     * Mybinder类
+     */
     public class Mybinder extends Binder {
+        /**
+         * 获取音乐播放服务
+         *
+         * @return 服务
+         */
         public MusicPlayService getservice() {
             return MusicPlayService.this;
         }
     }
 
     /**
+     * 播放下一首音乐
      *
+     * @return 当前音乐的播放位置
      */
-    public void playPause() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            pause();
-        } else if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-            resume();
-        }
+    public int playNext() {
+        playMusic(mPlayingMusicPosition + 1);
+
+        return mPlayingMusicPosition;
     }
-
-    public int pause() {
-        if (!mediaPlayer.isPlaying()) {
-            return -1;
-        }
-        mediaPlayer.pause();
-        mAudioManager.abandonAudioFocus(this);
-        Log.i("iii", "mediaPlayer.pause();");
-        return 0;
-
-    }
-
-    public int resume() {
-        if (mediaPlayer.isPlaying()) {
-            return -1;
-        }
-        mediaPlayer.start();
-        Log.i("iii", "mediaPlayer.start();");
-        return 0;
-    }
-
-
-    public void play(MusicInfoBean music) {
-        /**
-         * 若重复点击该歌曲 不重复播放
-         */
-        if (mPlayingMusic != null && mPlayingMusic.getUri() != null
-                && mPlayingMusic.getUri().equals(music.getUri())) {
-            Log.w("iii", "music.getUri().equals(music.getUri()");
-            if (!mediaPlayer.isPlaying()) {
-                resume();
-            }
-            return;
-        }
-        mPlayingMusic = music;
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(mPlayingMusic.getUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void play(int pos) {
-        if (getMusicList() == null) {         //
-            return;
-        }
-        /**
-         * 若重复点击该歌曲 不重复播放
-         * 同时先做下标判断，下标溢出置零
-         */
-        if (pos < 0) {
-            pos += getMusicList().size();
-        }
-
-        if (pos >= getMusicList().size()) {
-            pos %= getMusicList().size();
-        }
-        if (mPlayingMusicPosition == pos) {
-            if (!mediaPlayer.isPlaying()) {
-                resume();
-            }
-            return;
-        }
-        mPlayingMusicPosition = pos;
-        mPlayingMusic = getMusicList().get(pos);
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(getMusicList().get(pos).getUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void initPlayer() {
-        if (mediaPlayer.isPlaying()) {
-            stopPlayer();
-        }
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);// 设置媒体流类型
-        mediaPlayer.setOnBufferingUpdateListener(this);
-        mediaPlayer.setOnPreparedListener(this);
-
-        // playUrl(path);
-        Log.i("iii", "service initPlayer");
-    }
-
 
     /**
-     * @param url url地址
+     * 播放上一首
+     *
+     * @return 当前音乐的播放位置
      */
-    public void playUrl(String url) {
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(url); // 设置数据源
-            mediaPlayer.prepare(); // prepare自动播放
-            mediaPlayer.setOnPreparedListener(this);//注册一个监听器
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public int next() {
-        play(mPlayingMusicPosition + 1);
-        return mPlayingMusicPosition;
-    }
-
     public int preMusic() {
-        play(mPlayingMusicPosition - 1);
+        playMusic(mPlayingMusicPosition - 1);
+
         return mPlayingMusicPosition;
     }
 
-
-    public void stopPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            try {
-                mediaPlayer.prepare(); // 在调用stop后如果需要再次通过start进行播放,需要之前调用prepare函数
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
+    /**
+     * 获取当前播放音乐的信息
+     *
+     * @return 音乐信息
+     */
     public MusicInfoBean getPlayingMusic() {
         return mPlayingMusic;
     }
 
+    /**
+     * 获取播放音乐的位置
+     *
+     * @return 当前音乐的播放位置
+     */
     public static int getPlayingMusicPosition() {
+
         return mPlayingMusicPosition;
     }
 
-    public static boolean getPlayingState() {
-        return mediaPlayer.isPlaying();
+    /**
+     * 播放音乐
+     *
+     * @param position 播放位置
+     */
+    private void playMusic(int position) {
+        if (mMusicList == null) return;
+
+        if (position < 0) {
+            position = mMusicList.size();
+        } else if (position > mMusicList.size()) {
+            position = 0;
+        }
+
+        mPlayingMusicPosition = position;
+        mPlayingMusic = mMusicList.get(position);
+        mMusicPlayer.processPlayRequest(mPlayingMusic.getId(), mPlayingMusic.getUri());
     }
 
     /**
@@ -361,6 +250,4 @@ public class MusicPlayService extends Service implements
 
         return mActivityStack;
     }
-
-
 }

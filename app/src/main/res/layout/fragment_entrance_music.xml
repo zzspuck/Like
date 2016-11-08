@@ -7,8 +7,8 @@
 
     <include layout="@layout/fragment_view_toolbar" />
 
-    <FrameLayout
-        android:id="@+id/fem_content"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fem_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

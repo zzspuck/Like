@@ -20,7 +20,7 @@ import java.util.List;
  * @author zzs
  * @date 2016.06.16
  */
-public class AudioPlayer implements OnCompletionListener, OnPreparedListener, OnErrorListener, MusicFocusable {
+public class MusicPlayer implements OnCompletionListener, OnPreparedListener, OnErrorListener, MusicFocusable {
     // 降低后的音量
     public static final float DUCK_VOLUME = 0.1f;
     // mediaplayer
@@ -38,7 +38,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     // 当前播放对象
     private Object mCurrentPlayId = null;
     // player
-    private static AudioPlayer mAudioPlayer = null;
+    private static MusicPlayer mAudioPlayer = null;
     // player监听
     private List<PlayListener> mPlayListeners = new ArrayList<>();
 
@@ -74,9 +74,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
      * @param context 上下文
      * @return player
      */
-    public static AudioPlayer getInstance(Context context) {
+    public static MusicPlayer getInstance(Context context) {
         if (mAudioPlayer == null) {
-            mAudioPlayer = new AudioPlayer(context);
+            mAudioPlayer = new MusicPlayer(context);
         }
 
         return mAudioPlayer;
@@ -87,7 +87,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
      *
      * @param context 上下文
      */
-    private AudioPlayer(Context context) {
+    private MusicPlayer(Context context) {
         mContext = context.getApplicationContext();
     }
 
@@ -340,8 +340,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 
                 mCurrentPlayUri = manualUrl;
                 mCurrentPlayId = playId;
-            }
-            else {
+            } else {
                 Log.e(getLogTag(), "No available music to play. Place some music on your external storage \"\n" +
                         "\t\t\t\t\t\t\t\t\t+ \"device (e.g. your SD card) and try again.");
                 processStopRequest(true); // stop everything!
@@ -387,7 +386,10 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     @Override
     public void onCompletion(MediaPlayer player) {
         Log.i(getLogTag(), "onCompletion");
-        processStopRequest();
+        // processStopRequest();
+        for (PlayListener listener : mPlayListeners) {
+            listener.onCompletion(mCurrentPlayId, mCurrentPlayUri);
+        }
     }
 
     @Override
@@ -396,6 +398,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         // 开始播放
         mState = State.Playing;
         playSound();
+        for (PlayListener listener : mPlayListeners) {
+            listener.onPrepared(mCurrentPlayId, mCurrentPlayUri);
+        }
     }
 
     @Override
@@ -541,6 +546,16 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         @Override
         public void onError(Object playId, String error) {
         }
+
+        @Override
+        public void onCompletion(Object playId, String uri) {
+
+        }
+
+        @Override
+        public void onPrepared(Object playId, String uri) {
+
+        }
     }
 
     /**
@@ -558,6 +573,11 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 
         // 出错
         void onError(Object playId, String error);
+
+        // 播放完成
+        void onCompletion(Object playId, String uri);
+
+        void onPrepared(Object playId, String uri);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.zzs.like.music;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,8 @@ public class MusicEntranceFragment extends MVPBaseFragment<IMusicEntranceContrac
     RadioButton mOnlineMusRb;
     @Bind(R.id.rg_layout)
     RadioGroup mGroup;
+    @Bind(R.id.fem_viewpager)
+    ViewPager mViewpager;
 
 
     /**
