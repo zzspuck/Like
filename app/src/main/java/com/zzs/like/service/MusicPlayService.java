@@ -26,7 +26,6 @@ import java.util.List;
  * @date 2016.11.04
  */
 public class MusicPlayService extends Service implements MusicPlayer.PlayListener{
-
     // TAG
     private static final String TAG = MusicPlayService.class.getSimpleName();
     // 音乐信息列表
@@ -249,5 +248,15 @@ public class MusicPlayService extends Service implements MusicPlayer.PlayListene
     public static List<MVPBaseActivity> getActivityStack() {
 
         return mActivityStack;
+    }
+
+    /**
+     * 获取音乐播放器
+     *
+     * @return 音乐播放器
+     */
+    public MusicPlayer getMusicPlayer() {
+
+        return mMusicPlayer;
     }
 }

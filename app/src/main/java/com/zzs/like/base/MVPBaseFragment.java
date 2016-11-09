@@ -19,17 +19,21 @@ import butterknife.ButterKnife;
  * @date 2016.09.18
  */
 public abstract class MVPBaseFragment<V, T extends BasePresenter<V>> extends Fragment {
-
+    // prsenter
     protected T mPresenter;
-
+    // 是否刷新
     private boolean mIsRequestDataRefresh = false;
+    // 刷新控件
     private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = createPresenter();
-        mPresenter.attachView((V)this);
+        // 允许为空，不是所有都要实现MVP模式
+        if (createPresenter() != null) {
+            mPresenter = createPresenter();
+            mPresenter.attachView((V)this);
+        }
     }
 
     @Override

@@ -69,6 +69,9 @@ public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends App
         StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
     }
 
+    /**
+     * 设置下拉刷新
+     */
     private void setupSwipeRefresh() {
         mRefreshLayout = (SwipeRefreshLayout) findViewById(provideSwipeRefershViewId());
         if (mRefreshLayout != null) {
@@ -85,11 +88,18 @@ public abstract class MVPBaseActivity<V, T extends BasePresenter<V>> extends App
         }
     }
 
+    /**
+     * 申请刷新
+     */
     public void requestDataRefresh() {
         mIsRequestDataRefresh = true;
     }
 
-
+    /**
+     * 设置刷新
+     *
+     * @param requestDataRefresh 是否刷新（true：刷新，false：不刷新）
+     */
     public void setRefresh(boolean requestDataRefresh) {
         if (mRefreshLayout == null) {
             return;

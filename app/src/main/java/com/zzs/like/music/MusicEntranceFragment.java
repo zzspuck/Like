@@ -17,8 +17,9 @@ import butterknife.Bind;
  *
  * @author zzs
  * @date 2016.11.01
+ * @note 这个Fragment不需要实现MVP模式
  */
-public class MusicEntranceFragment extends MVPBaseFragment<IMusicEntranceContract.IMusicEntranceFgView, MusicEntranceFgPresenter> implements View.OnClickListener {
+public class MusicEntranceFragment extends MVPBaseFragment implements View.OnClickListener {
     // TAG
     private static final String TAG = MusicEntranceFragment.class.getSimpleName();
     @Bind(R.id.ft_toolbar)
@@ -74,7 +75,8 @@ public class MusicEntranceFragment extends MVPBaseFragment<IMusicEntranceContrac
     @Override
     protected MusicEntranceFgPresenter createPresenter() {
 
-        return new MusicEntranceFgPresenter();
+        // 不实现MVP
+        return null;
     }
 
     @Override

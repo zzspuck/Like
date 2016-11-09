@@ -45,7 +45,7 @@ public class MusicPlayer implements OnCompletionListener, OnPreparedListener, On
     /**
      * 播放器的播放状态
      */
-    private enum State {
+    public enum State {
         // 停止状态
         Stopped,
         // 播放器正在准备中
