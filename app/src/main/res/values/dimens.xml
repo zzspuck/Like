@@ -5,5 +5,7 @@
 
     <dimen name="fab_margin">0dp</dimen>
     <dimen name="toolbar_padding_top">0dp</dimen>
+    <!-- music -->
     <dimen name="play_bar_height">57dp</dimen>
+    <dimen name="screen_tips_top">80dp</dimen>
 </resources>

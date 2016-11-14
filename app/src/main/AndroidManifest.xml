@@ -32,7 +32,6 @@
         </activity>
         <activity android:name=".curiosityDaily.dailyFeed.DailyFeedActivity" />
         <activity android:name=".curiosityDaily.gankweb.GankWebActivity" />
-        <activity android:name=".music.MusicActivity"></activity>
     </application>
 
 </manifest>

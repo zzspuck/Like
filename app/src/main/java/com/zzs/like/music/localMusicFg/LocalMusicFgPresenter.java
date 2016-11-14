@@ -1,12 +1,12 @@
-package com.zzs.like.music;
+package com.zzs.like.music.localMusicFg;
 
 import com.zzs.like.base.BasePresenter;
 
 /**
- * 音乐主界面入口Presenter
+ * 本地音乐界面Presenter
  *
  * @author zzs
- * @date 2016.11.01
+ * @date 2016.11.14
  * @note -
  * -------------------------------------------------------------------------------------------------
  * @modified -
@@ -14,6 +14,5 @@ import com.zzs.like.base.BasePresenter;
  * @note -
  */
 
-public class MusicEntranceFgPresenter extends BasePresenter<IMusicEntranceContract.IMusicEntranceFgView> {
-
+public class LocalMusicFgPresenter extends BasePresenter<ILocalMusicContract.ILocalMusicFgView> {
 }

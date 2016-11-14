@@ -18,7 +18,7 @@ import butterknife.Bind;
  * @author zzs
  * @date 2016.09.27
  */
-public class DailyFragment extends MVPBaseFragment<IDailyFgContract.IDailyFgView,DailyFgPresenter> implements IDailyFgContract.IDailyFgView {
+public class DailyFragment extends MVPBaseFragment<IDailyFgContract.IDailyFgView, DailyFgPresenter> implements IDailyFgContract.IDailyFgView {
     // 线性布局管理器
     private LinearLayoutManager mLayoutManager;
     @Bind(R.id.content_list)

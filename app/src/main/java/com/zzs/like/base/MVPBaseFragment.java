@@ -54,6 +54,11 @@ public abstract class MVPBaseFragment<V, T extends BasePresenter<V>> extends Fra
         mPresenter.detachView();
     }
 
+    /**
+     * 设置下拉刷新
+     *
+     * @param view view
+     */
     private void setupSwipeRefresh(View view){
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(provideSwipeRefershViewId());
         if(mRefreshLayout != null){
@@ -70,11 +75,18 @@ public abstract class MVPBaseFragment<V, T extends BasePresenter<V>> extends Fra
         }
     }
 
+    /**
+     * 申请数据刷新
+     */
     public void requestDataRefresh() {
         mIsRequestDataRefresh = true;
     }
 
-
+    /**
+     * 设置刷新
+     *
+     * @param requestDataRefresh 申请刷新
+     */
     public void setRefresh(boolean requestDataRefresh) {
         if (mRefreshLayout == null) {
             return;

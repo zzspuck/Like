@@ -1,7 +1,7 @@
-package com.zzs.like.music;
+package com.zzs.like.music.localMusicFg;
 
 /**
- * 音乐界面入口接口
+ * 本地音乐界面接口
  *
  * @author zzs
  * @date 2016.11.01
@@ -12,16 +12,22 @@ package com.zzs.like.music;
  * @note -
  */
 
-public interface IMusicEntranceContract {
+public interface ILocalMusicContract {
 
     /**
      * view Interface
      */
-    interface IMusicEntranceFgView{
+    interface ILocalMusicFgView{
     }
 
     /**
      * presenter Interface
      */
-    interface IMusicEntrancePresenter{}
+    interface ILocalMusicPresenter{
+
+        /**
+         * 设置本地音乐适配器
+         */
+        void setLocalAdapter();
+    }
 }

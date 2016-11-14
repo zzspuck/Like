@@ -3,12 +3,12 @@ package com.zzs.like.music;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.zzs.like.R;
 import com.zzs.like.base.MVPBaseFragment;
+import com.zzs.like.music.localMusicFg.LocalMusicFgPresenter;
 
 import butterknife.Bind;
 
@@ -73,7 +73,7 @@ public class MusicEntranceFragment extends MVPBaseFragment implements View.OnCli
     }
 
     @Override
-    protected MusicEntranceFgPresenter createPresenter() {
+    protected LocalMusicFgPresenter createPresenter() {
 
         // 不实现MVP
         return null;

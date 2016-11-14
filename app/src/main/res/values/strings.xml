@@ -12,4 +12,5 @@
     <string name="string_online_music">在线音乐</string>
     <string name="string_my_music">我的音乐</string>
     <string name="unknown">未知</string>
+    <string name="no_local_music">暂无本地音乐</string>
 </resources>
