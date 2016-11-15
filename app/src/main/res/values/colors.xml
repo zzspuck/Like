@@ -43,4 +43,6 @@
     <color name="translucent_grey_900_96p">#F5212121</color>
     <color name="translucent_grey_700_96p">#F5616161</color>
     <color name="red">#F44336</color>
+
+    <color name="translucent_grey">#809E9E9E</color>
 </resources>
