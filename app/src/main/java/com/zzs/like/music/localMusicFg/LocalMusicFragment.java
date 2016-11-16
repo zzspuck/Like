@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.zzs.like.R;
 import com.zzs.like.base.MVPBaseFragment;
 
@@ -33,6 +32,7 @@ public class LocalMusicFragment extends MVPBaseFragment<ILocalMusicContract.ILoc
         LinearLayoutManager layoutManager = mPresenter.getLayoutManager(getActivity());
         mRvLocalMusic.setLayoutManager(layoutManager);
         mRvLocalMusic.setAdapter(adapter);
+
     }
 
     @Override
