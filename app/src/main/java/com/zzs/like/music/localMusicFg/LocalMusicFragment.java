@@ -65,5 +65,6 @@ public class LocalMusicFragment extends MVPBaseFragment<ILocalMusicContract.ILoc
      */
     @Override
     public void itemClickListener(BaseQuickAdapter adapter, View view, int position) {
+
     }
 }

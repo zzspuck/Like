@@ -5,8 +5,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.zzs.like.data.music.MusicInfoBean;
+import db.MusicInfoBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,19 +17,25 @@ import java.util.List;
  * @date 2016.11.07
  */
 public class MusicScanUntils {
+    // 音乐信息集合
+    private static List<MusicInfoBean> mMusicList = new ArrayList<>();
+
+
     /**
-     * 扫描歌曲
+     * 获取音乐信息
+     *
+     * @param context 上下文
+     * @return 音乐信息
      */
-    public static void scanMusic(Context context, List<MusicInfoBean> musicList) {
-        musicList.clear();
-        /**
-         * 使用系统提供的歌曲列表
-         */
+    public static List<MusicInfoBean> scanMusic(Context context) {
+        mMusicList.clear();
+
+        // 使用系统提供的歌曲列表
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if (cursor == null) {
-            return;
+            return null;
         }
         // 获取音乐信息
         while (cursor.moveToNext()) {
@@ -62,16 +69,19 @@ public class MusicScanUntils {
             music.setFileName(fileName);
             music.setFileSize(fileSize);
             music.setYear(year);
-            musicList.add(music);
+            mMusicList.add(music);
         }
+
         cursor.close();
+
+        return mMusicList;
     }
 
     /**
      * 根据封面ID查找封面uri
      *
-     * @param context　上下文
-     * @param albumId　专辑ID
+     * @param context 　上下文
+     * @param albumId 　专辑ID
      * @return 封面的uri
      */
     private static String getCoverUri(Context context, long albumId) {

@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.zzs.like.MyApp;
 import com.zzs.like.data.daily.TopStories;
 import com.zzs.like.util.ScreenUtil;
 

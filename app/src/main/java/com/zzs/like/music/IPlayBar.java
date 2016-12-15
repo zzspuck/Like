@@ -1,6 +1,6 @@
 package com.zzs.like.music;
 
-import com.zzs.like.data.music.MusicInfoBean;
+import db.MusicInfoBean;
 
 /**
  * 设置播放按钮

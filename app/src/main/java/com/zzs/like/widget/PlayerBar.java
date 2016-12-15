@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zzs.like.R;
-import com.zzs.like.data.music.MusicInfoBean;
+import db.MusicInfoBean;
 import com.zzs.like.service.MusicPlayService;
 import com.zzs.like.util.MusicPlayer;
 import com.zzs.like.util.SysLog;
@@ -148,7 +148,8 @@ public class PlayerBar extends FrameLayout implements View.OnClickListener {
             case R.id.iv_play_bar_play: {
                 SysLog.i(TAG, "iv_play_bar_play 点击事件 暂停或者播放");
                 MusicPlayer musicPlayer = musicPlayService.getMusicPlayer();
-                musicPlayer.processTogglePlaybackRequest();
+                MusicInfoBean playingMusic = musicPlayService.getPlayingMusic();
+                musicPlayer.processTogglePlaybackRequest(playingMusic.getUri());
 
                 if (musicPlayer.getState() == MusicPlayer.State.Playing) {
                     mImagePlayButton.setImageResource(R.drawable.ic_play_bar_btn_pause);

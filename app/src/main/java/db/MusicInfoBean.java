@@ -1,6 +1,9 @@
-package com.zzs.like.data.music;
+package db;
 
 import android.graphics.Bitmap;
+
+import org.litepal.annotation.Column;
+import org.litepal.crud.DataSupport;
 
 /**
  * 音乐信息类
@@ -8,9 +11,10 @@ import android.graphics.Bitmap;
  * @author zzs
  * @date 2016.11.03
  */
-public class MusicInfoBean {
+public class MusicInfoBean extends DataSupport {
 
     // 歌曲类型 本地/网络
+    @Column(ignore = true)
     private Type type;
     // [本地歌曲]歌曲id
     private long id;
@@ -29,6 +33,7 @@ public class MusicInfoBean {
     // 文件名
     private String fileName;
     // [网络歌曲]专辑封面bitmap
+    @Column(ignore = true)
     private Bitmap cover;
     // 文件大小
     private long fileSize;

@@ -3,6 +3,7 @@ package com.zzs.like.service;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -10,10 +11,11 @@ import android.support.annotation.Nullable;
 
 import com.zzs.like.base.MVPBaseActivity;
 import com.zzs.like.constants.AppPreferences;
-import com.zzs.like.data.music.MusicInfoBean;
+import db.MusicInfoBean;
 import com.zzs.like.receiver.PhoneComingReceiver;
 import com.zzs.like.util.MusicPlayer;
 import com.zzs.like.util.MusicScanUntils;
+import com.zzs.like.util.SharedPrefData;
 import com.zzs.like.util.SysLog;
 
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public class MusicPlayService extends Service implements MusicPlayer.PlayListene
         SysLog.i(TAG, "service onStartCommand");
         switch (intent.getAction()) {
             case AppPreferences.ACTION_MEDIA_PLAY_PAUSE:
-                mMusicPlayer.processTogglePlaybackRequest();
+                mMusicPlayer.processTogglePlaybackRequest(mPlayingMusic.getUri());
                 break;
             case AppPreferences.ACTION_MEDIA_NEXT:
                 playNext();
@@ -98,7 +100,24 @@ public class MusicPlayService extends Service implements MusicPlayer.PlayListene
      */
     public void updateMusicList() {
 
-        MusicScanUntils.scanMusic(this, getMusicList());
+        // 获取是否已经扫描过本地音乐
+        boolean scanMusic = SharedPrefData.getBoolean(AppPreferences.DP_SCAN_LOCAL_MUSIC, false);
+        if (!scanMusic) {
+            // 没有扫描过则扫描
+            List<MusicInfoBean> musicInfoList = MusicScanUntils.scanMusic(this);
+            if (musicInfoList != null) {
+                // 不为空则保存音乐数据到数据库，并设置扫描音乐为true
+                SharedPrefData.putBoolean(AppPreferences.DP_SCAN_LOCAL_MUSIC, true);
+                for (MusicInfoBean musicInfoBean : musicInfoList) {
+                    boolean save = musicInfoBean.save();
+                    if (save) {
+                        SysLog.i(TAG, "音乐信息保存成功");
+                    } else {
+                        SysLog.e(TAG, "音乐信息保存失败");
+                    }
+                }
+            }
+        }
 
         if (getMusicList().isEmpty()) {
             SysLog.w(TAG, "getMusicList().isEmpty()");
@@ -190,6 +209,9 @@ public class MusicPlayService extends Service implements MusicPlayer.PlayListene
      * @return 音乐信息
      */
     public MusicInfoBean getPlayingMusic() {
+        if (mMusicPlayer == null) {
+            mPlayingMusic = mMusicList.get(0);
+        }
         return mPlayingMusic;
     }
 

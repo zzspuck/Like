@@ -5,17 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.zzs.like.R;
 import com.zzs.like.base.MVPBaseFragment;
-import com.zzs.like.data.music.MusicInfoBean;
+import db.MusicInfoBean;
 import com.zzs.like.music.OnlineMusicFg.OnlineMusicFragment;
 import com.zzs.like.music.localMusicFg.LocalMusicFgPresenter;
 import com.zzs.like.music.localMusicFg.LocalMusicFragment;

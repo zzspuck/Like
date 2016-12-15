@@ -102,10 +102,12 @@ public class MusicPlayer implements OnCompletionListener, OnPreparedListener, On
 
     /**
      * 播放、暂停、切换请求
+     *
+     * @param url 播放音乐的url
      */
-    public void processTogglePlaybackRequest() {
+    public void processTogglePlaybackRequest(String url) {
         if (mState == State.Paused || mState == State.Stopped) {
-            processPlayRequest(mCurrentPlayId, null);
+            processPlayRequest(mCurrentPlayId, url);
         } else {
             processPauseRequest();
         }
